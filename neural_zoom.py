@@ -53,6 +53,7 @@ parser.add_argument("-original_colors", type=int, default=0)
 parser.add_argument("-pooling", choices=['avg', 'max'], default='max')
 parser.add_argument("-model_file", type=str, default='models/vgg19-d01eb7cb.pth')
 parser.add_argument("-proto_file", type=str, default='')
+parser.add_argument("-disable_check", action='store_true')
 parser.add_argument("-backend", choices=['nn', 'cuda', 'cudnn', 'clnn', 'mkl', 'cudnn,mkl', 'mkl,cudnn'], default='nn')
 parser.add_argument("-cudnn_autotune", action='store_true')
 parser.add_argument("-seed", type=int, default=-1)
@@ -203,6 +204,8 @@ def parameters():
        remove_list.append('proto_file')
     if params.original_colors == 0:
        remove_list.append('original_colors')
+    if not params.disable_check:
+       remove_list.append('disable_check')
     params_dict = dict(vars(params))
     new_string = ''
 
