@@ -26,8 +26,9 @@ parser.add_argument("-style_image", help="Style target image", default='')
 parser.add_argument("-style_blend_weights", default=None) 
 parser.add_argument("-content_image", help="Content target image", default='')
 parser.add_argument("-image_size", help="Maximum height / width of generated image", type=int, default=512)
-parser.add_argument("-gpu", help="Zero-indexed ID of the GPU to use; for CPU mode set -gpu = -1", default=0)
+parser.add_argument("-gpu", help="Zero-indexed ID of the GPU to use; for CPU mode set -gpu = -1 (neural-style) or 'c' for neural-style-pt", default=0)
 parser.add_argument("-multigpu_strategy", help="Index of layers to split the network across GPUs", default='')
+parser.add_argument("-multidevice_strategy", help="Index of layers to split the network across devices", default='')
 
 # Optimization options
 parser.add_argument("-content_weight", type=float, default=5e0) 
@@ -52,7 +53,7 @@ parser.add_argument("-original_colors", type=int, default=0)
 parser.add_argument("-pooling", choices=['avg', 'max'], default='max')
 parser.add_argument("-model_file", type=str, default='models/vgg19-d01eb7cb.pth')
 parser.add_argument("-proto_file", type=str, default='')
-parser.add_argument("-backend", choices=['nn', 'cuda', 'cudnn', 'clnn', 'mkl'], default='nn')
+parser.add_argument("-backend", choices=['nn', 'cuda', 'cudnn', 'clnn', 'mkl', 'cudnn,mkl', 'mkl,cudnn'], default='nn')
 parser.add_argument("-cudnn_autotune", action='store_true')
 parser.add_argument("-seed", type=int, default=-1)
 
@@ -196,6 +197,8 @@ def parameters():
        remove_list.append('cudnn_autotune')
     if params.multigpu_strategy == '':
        remove_list.append('multigpu_strategy')
+    if params.multidevice_strategy == '':
+       remove_list.append('multidevice_strategy')
     if params.proto_file == '':
        remove_list.append('proto_file')
     if params.original_colors == 0:
