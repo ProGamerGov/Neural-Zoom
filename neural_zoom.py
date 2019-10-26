@@ -33,6 +33,7 @@ parser.add_argument("-multidevice_strategy", help="Index of layers to split the 
 # Optimization options
 parser.add_argument("-content_weight", type=float, default=5e0) 
 parser.add_argument("-style_weight", type=float, default=1e2)
+parser.add_argument("-normalize_weights", action='store_true')
 parser.add_argument("-tv_weight", type=float, default=1e-3)
 parser.add_argument("-num_iterations", type=int, default=1000)
 parser.add_argument("-normalize_gradients", action='store_true') 
@@ -194,8 +195,10 @@ def parameters():
     remove_list = ['output_dir', 'num_zeros', 'num_frames', 'script', 'crop', 'crop_width', 'crop_height', 'content_image', 'init_image', 'output_image', 'starting_image', 'start_num', 'num_mode', 'input_image', 'verbose']
     if not params.normalize_gradients:
        remove_list.append('normalize_gradients')
-    if not params.normalize_gradients:
+    if not params.cudnn_autotune:
        remove_list.append('cudnn_autotune')
+    if not params.normalize_weights:
+       remove_list.append('normalize_weights')
     if params.multigpu_strategy == '':
        remove_list.append('multigpu_strategy')
     if params.multidevice_strategy == '':
